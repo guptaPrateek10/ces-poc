@@ -5,3 +5,12 @@ export type ProductTypes = {
     description: string;
     category: string;
 };
+
+export type TableHeadersProps = [
+    ID: string,
+    Title: string,
+    Price: string,
+    Category: string,
+    Description: string
+]
+

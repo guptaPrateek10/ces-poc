@@ -5,11 +5,11 @@ import { jest } from "@jest/globals";
 
 global.fetch = jest.fn() ;
 describe("Home Component", () => {
+    afterEach(() => {
+        jest.clearAllMocks(); 
+      });
 
     test("renders the product list with titles and prices", async () => {
-        // Define mock products data
-        // axios.get = jest.fn();
-
         const mockProducts = [
             {
                 id: 1,
@@ -29,12 +29,19 @@ describe("Home Component", () => {
             })
         );
 
+        // (global.fetch).mockResolvedValueOnce({
+        //     ok: true,
+        //     json: async () => mockProducts,
+        //   });
+
         render(await Home());
 
-        const product1Title = await screen.findByText("Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops");
-        const product1Price = await screen.findByText("$109.95");
-        const productDescription = await screen.findByText("Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday");
-        const productCategory = await screen.findByText("men's clothing");
+        // use exact to check the test
+    
+        const product1Title = await screen.findByText("Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",{ exact: true});
+        const product1Price = await screen.findByText("$109.95",{exact: true});
+        const productDescription = await screen.findByText("Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",{exact: true});
+        const productCategory = await screen.findByText("men's clothing", {exact: true});
 
         expect(product1Title).toBeInTheDocument();
         expect(productDescription).toBeInTheDocument();
@@ -43,5 +50,23 @@ describe("Home Component", () => {
 
 
     });
+
+    test("displays an error message when the API call fails", async () => {
+        // Mock fetch to fail
+        (global.fetch).mockResolvedValueOnce({
+          ok: false, // Simulate failed API response
+        });
+    
+        // Render the Home component
+        render(await Home());
+    
+        // Check for the error message
+        const errorMessage = await screen.findByText("No data found", {
+          exact: true,
+        });
+    
+        // Assert the error message is shown
+        expect(errorMessage).toBeInTheDocument();
+      });
 
 });

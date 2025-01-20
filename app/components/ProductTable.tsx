@@ -1,32 +1,15 @@
-"use client";
-
-import React, { useCallback, useEffect, useState } from "react";
 import { ProductTypes } from "../types/productTypes";
 import DataTable from "./DataTable";
 
-export default function ProductTable() {
-    const [products, setProducts] = useState<ProductTypes[]>([]);
-    const [loading, setLoading] = useState(true);
+export default async function ProductTable() {
+    let products: ProductTypes[] = [];
 
-    const fetchProducts = useCallback(async () => {
-        try {
-            const res = await fetch("/api/products");
-            const data = await res.json();
-            setProducts(data);
-        } catch (error) {
-            console.error("Failed to fetch products:", error);
-        } finally {
-            setLoading(false);
-        }
-    }, [])
+  try {
+    products = await getProducts();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    if (loading) {
-        return <div className="p-4">Loading...</div>;
-    }
 
     return (
         <div className="p-6">
@@ -38,3 +21,14 @@ export default function ProductTable() {
         </div>
     );
 }
+
+
+export async function getProducts(): Promise<ProductTypes[]> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch products");
+    }
+    return res.json();
+  }
