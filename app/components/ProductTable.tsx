@@ -30,7 +30,6 @@ export default function ProductTable() {
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">Product List</h1>
             {products.length === 0 ? (
                 <p className="text-red-500 text-lg">No data found</p>
             ) : (
