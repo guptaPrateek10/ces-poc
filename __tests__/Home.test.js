@@ -3,7 +3,7 @@ import Home from "@/app/page";  // Adjust this import path if needed
 import { jest } from "@jest/globals";
 
 
-global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+global.fetch = jest.fn() ;
 describe("Home Component", () => {
 
     test("renders the product list with titles and prices", async () => {
@@ -31,10 +31,10 @@ describe("Home Component", () => {
 
         render(await Home());
 
-        const product1Title = await screen.findByText(/Fjallraven/i);
+        const product1Title = await screen.findByText("Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops");
         const product1Price = await screen.findByText("$109.95");
-        const productDescription = await screen.findByText(/Your perfect pack for everyday use and walks in the forest/i);
-        const productCategory = await screen.findByText(/men's clothing/i);
+        const productDescription = await screen.findByText("Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday");
+        const productCategory = await screen.findByText("men's clothing");
 
         expect(product1Title).toBeInTheDocument();
         expect(productDescription).toBeInTheDocument();
