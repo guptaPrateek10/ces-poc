@@ -34,5 +34,6 @@ describe("ProductTable Component Testing", () => {
     const dataTable = screen.getByTestId("data-table");
     expect(dataTable).toBeInTheDocument();
     expect(dataTable).toHaveTextContent("Mocked DataTable with 1 products");
+  
   });
 });

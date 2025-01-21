@@ -45,23 +45,6 @@ describe("Home  Component Tesing", () => {
 
     const noDataTitle = screen.getByTestId("no-data");
     expect(noDataTitle).toBeInTheDocument();
-    // const product1Title = await screen.findByText(
-    //   "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
-    //   { exact: true }
-    // );
-    // const product1Price = await screen.findByText("$109.95", { exact: true });
-    // const productDescription = await screen.findByText(
-    //   "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
-    //   { exact: true }
-    // );
-    // const productCategory = await screen.findByText("men's clothing", {
-    //   exact: true,
-    // });
-
-    // expect(product1Title).toBeInTheDocument();
-    // expect(productDescription).toBeInTheDocument();
-    // expect(productCategory).toBeInTheDocument();
-    // expect(product1Price).toBeInTheDocument();
   });
 
   //check failure fetch
@@ -92,7 +75,6 @@ describe("Home  Component Tesing", () => {
 
   it("renders the Home component with child Heading ", async () => {
     const component = render(await Home());
-    console.log(component);
     // Check if the Heading component renders with the correct title
     const childElementHeading = component.getByText("Product Table", {
       exact: true,
