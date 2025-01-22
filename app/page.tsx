@@ -27,5 +27,6 @@ export async function getProducts(): Promise<ProductTypes[]> {
   if (!res.ok) {
     throw new Error("Failed to fetch products");
   }
+  
   return res.json();
 }
