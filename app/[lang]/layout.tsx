@@ -31,7 +31,7 @@ export default async function RootLayout({
   params: { lang: 'en' | 'de' | 'nl' }
 }>) {
   return (
-    <html lang={await params.lang}>
+    <html lang={(await params).lang}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
