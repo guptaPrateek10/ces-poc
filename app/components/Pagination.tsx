@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ARROWS } from "../utils/constants";
 
 type PaginationProps = {
   currentPage: number;
@@ -9,6 +10,7 @@ type PaginationProps = {
 };
 
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+  
   const handlePrevious = () => {
     if (currentPage > 1) onPageChange(currentPage - 1);
   };
@@ -24,7 +26,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         disabled={currentPage === 1}
         className="px-4 py-2 bg-gray-700 rounded disabled:bg-gray-500 disabled:opacity-60 disabled:cursor-not-allowed "
       >
-        &larr;
+       {ARROWS.LEFT}
       </button>
 
       {Array.from({ length: totalPages }, (_, i) => (
@@ -44,7 +46,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         disabled={currentPage === totalPages}
         className="px-4 py-2 bg-gray-700 rounded disabled:bg-gray-600 disabled:cursor-not-allowed "
       >
-        &rarr;
+        {ARROWS.RIGHT}
       </button>
     </div>
   );
