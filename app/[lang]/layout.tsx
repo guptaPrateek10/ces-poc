@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +23,7 @@ export async function generateStaticParams() {
 }
  
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params
 }: Readonly<{
@@ -30,10 +31,11 @@ export default function RootLayout({
   params: { lang: 'en' | 'de' | 'nl' }
 }>) {
   return (
-    <html lang={params.lang}>
+    <html lang={await params.lang}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster richColors closeButton position="top-right" />
         {children}
       </body>
     </html>

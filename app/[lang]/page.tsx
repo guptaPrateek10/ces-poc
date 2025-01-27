@@ -5,6 +5,8 @@ import ProductTable from "../components/ProductTable";
 import { ProductTypes } from "../types/productTypes";
 import { getDictionary } from "./dictionaries";
 import Link from "next/link";
+import { toast } from "sonner";
+import FetchToastNotifier from "../components/common/FetchToastNotifier";
 
 export default async function Home({
   params 
@@ -12,10 +14,12 @@ export default async function Home({
   params: Promise<{ lang: "en" | "nl" }>;
 }) {
   let products: ProductTypes[] = [];
-
+  let fetchError;
   try {
     products = await getProducts();
+    fetchError = false;
   } catch (error) {
+    fetchError=true;
     console.error("Error fetching products:", error);
   }
   const languange = (await params).lang;
@@ -33,6 +37,7 @@ export default async function Home({
       </h1>
       <Heading title={dictionary.Heading.title} lang={languange}  />
       <ProductTable products={products} />
+      <FetchToastNotifier fetchError={fetchError} />
     </Container>
   );
 }
@@ -45,6 +50,5 @@ export async function getProducts(): Promise<ProductTypes[]> {
   if (!res.ok) {
     throw new Error("Failed to fetch products");
   }
-
   return res.json();
 }
