@@ -1,25 +1,26 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import Pagination from "@/app/components/Pagination";
+import { ARROWS, BUTTON } from "@/app/utils/constants";
 
 describe("Pagination Component", () => {
   it("renders the correct number of page buttons", () => {
     render(<Pagination currentPage={1} totalPages={3} onPageChange={jest.fn()} />);
 
-    const pageButtons = screen.getAllByRole("button", { name: /\d+/ });
+    const pageButtons = screen.getAllByRole(BUTTON, { name: /\d+/ });
     expect(pageButtons).toHaveLength(3); // 3 pages
   });
 
   it("disables the 'Previous' button on the first page", () => {
     render(<Pagination currentPage={1} totalPages={3} onPageChange={jest.fn()} />);
 
-    const previousButton = screen.getByText("←");
+    const previousButton = screen.getByText(ARROWS.LEFT);
     expect(previousButton).toBeDisabled();
   });
 
   it("disables the 'Next' button on the last page", () => {
     render(<Pagination currentPage={3} totalPages={3} onPageChange={jest.fn()} />);
 
-    const nextButton = screen.getByText("→");
+    const nextButton = screen.getByText(ARROWS.RIGHT);
     expect(nextButton).toBeDisabled();
   });
 
@@ -37,8 +38,8 @@ describe("Pagination Component", () => {
     const mockOnPageChange = jest.fn();
     render(<Pagination currentPage={2} totalPages={3} onPageChange={mockOnPageChange} />);
 
-    const nextButton = screen.getByText("→");
-    const previousButton = screen.getByText("←");
+    const nextButton = screen.getByText(ARROWS.RIGHT);
+    const previousButton = screen.getByText(ARROWS.LEFT);
 
     fireEvent.click(nextButton);
     fireEvent.click(previousButton);
