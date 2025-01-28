@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import {  render, screen } from "@testing-library/react";
 import ProductTable from "../../app/components/ProductTable";
 import { ProductTypes } from "../../app/types/productTypes";
+import { faker } from "@faker-js/faker";
 
 jest.mock("../../app/components/DataTable", () => {
   return function MockDataTable({ products }: { products: ProductTypes[] }) {
@@ -12,6 +13,10 @@ jest.mock("../../app/components/DataTable", () => {
   };
 });
 describe("ProductTable Component Testing", () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test("when no data is passed and empty products[]", () => {
     render(<ProductTable products={[]} />);
     const noDataTitle = screen.getByTestId("no-data");
@@ -22,12 +27,12 @@ describe("ProductTable Component Testing", () => {
   test("render datatable with products", () => {
     const mockData: ProductTypes[] = [
       {
-        id: 1,
-        title: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
-        price: 109.95,
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
         description:
-          "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
-        category: "men's clothing",
+          faker.commerce.productDescription(),
+        category: faker.commerce.department(),
       },
     ];
     render(<ProductTable products={mockData} />);
@@ -36,4 +41,43 @@ describe("ProductTable Component Testing", () => {
     expect(dataTable).toHaveTextContent("Mocked DataTable with 1 products");
   
   });
+
+  test("Sort dropdown is rendered in product table with default values as empty string ", () => {
+    const mockData: ProductTypes[] = [
+      {
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
+        description:
+          faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ];
+    render(<ProductTable products={mockData} />);
+    const dropdown = screen.getByTestId("sort-dropdown");
+    expect(dropdown).toBeInTheDocument();
+    expect(dropdown).toHaveValue("");
+  });
+
+  test("Sort dropdown is rendered in product table with options", () => {
+    const mockData: ProductTypes[] = [
+      {
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
+        description:
+          faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ];
+    render(<ProductTable products={mockData} />);
+    const dropdown = screen.getByTestId("sort-dropdown");
+    expect(dropdown).toBeInTheDocument();
+    expect(screen.getByText("Sort by price")).toBeInTheDocument();
+    expect(screen.getByText("Price: High to Low")).toBeInTheDocument();
+    expect(screen.getByText("Price: Low to High")).toBeInTheDocument();
+    expect(screen.getByText("Reset")).toBeInTheDocument();
+  });
+
+ 
 });
