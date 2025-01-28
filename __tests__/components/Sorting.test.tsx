@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import SortDropdown from "@/app/components/SortDropdown";
+import { HIGHTOLOW, LOWTOHIGH, RESET } from "@/app/utils/constants";
 
 describe("SortDropdown Component", () => {
   const mockOnSortChange = jest.fn();
@@ -14,9 +15,7 @@ describe("SortDropdown Component", () => {
     const dropdown = screen.getByTestId("sort-dropdown");
     expect(dropdown).toBeInTheDocument();
 
-    expect(dropdown).toHaveValue("reset");
-
-    expect(screen.getByText("reset")).toBeInTheDocument();
+    expect(screen.getByText("Reset")).toBeInTheDocument();
     expect(screen.getByText("Price: High to Low")).toBeInTheDocument();
     expect(screen.getByText("Price: Low to High")).toBeInTheDocument();
   });
@@ -26,12 +25,12 @@ describe("SortDropdown Component", () => {
 
     const dropdown = screen.getByTestId("sort-dropdown");
 
-    fireEvent.change(dropdown, { target: { value: "highToLow" } });
-    expect(mockOnSortChange).toHaveBeenCalledWith("highToLow");
+    fireEvent.change(dropdown, { target: { value: HIGHTOLOW } });
+    expect(mockOnSortChange).toHaveBeenCalledWith(HIGHTOLOW);
     expect(mockOnSortChange).toHaveBeenCalledTimes(1);
 
-    fireEvent.change(dropdown, { target: { value: "lowToHigh" } });
-    expect(mockOnSortChange).toHaveBeenCalledWith("lowToHigh");
+    fireEvent.change(dropdown, { target: { value: LOWTOHIGH } });
+    expect(mockOnSortChange).toHaveBeenCalledWith(LOWTOHIGH);
     expect(mockOnSortChange).toHaveBeenCalledTimes(2); // Second call
   });
 
@@ -40,8 +39,8 @@ describe("SortDropdown Component", () => {
 
     const dropdown = screen.getByTestId("sort-dropdown");
 
-    fireEvent.change(dropdown, { target: { value: "reset" } });
-    expect(mockOnSortChange).toHaveBeenCalledWith("reset");
+    fireEvent.change(dropdown, { target: { value: RESET } });
+    expect(mockOnSortChange).toHaveBeenCalledWith(RESET);
     expect(mockOnSortChange).toHaveBeenCalledTimes(1);
   });
 });

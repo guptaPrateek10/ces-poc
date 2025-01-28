@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { ProductTypes } from "../types/productTypes";
 import DataTable from "./DataTable";
 import Pagination from "./Pagination";
+import UsePaginate from "../hooks/UsePaginate";
+import SortDropdown from "./SortDropdown";
+import { HIGHTOLOW, LOWTOHIGH } from "../utils/constants";
 
 export default function ProductTable({
   products,
@@ -10,11 +13,35 @@ export default function ProductTable({
   products: ProductTypes[];
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 3;
-  const startIndex = (currentPage - 1) * recordsPerPage;
-  const endIndex = startIndex + recordsPerPage;
-  const paginatedProducts = products.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(products.length / recordsPerPage);
+  const [receivedProducts, setReceivedProducts] =
+    useState<ProductTypes[]>(products);
+  const [renderedProducts, setRenderedProducts] = useState<ProductTypes[]>([]);
+  const { paginatedProducts, totalPages } = UsePaginate({
+    products: receivedProducts,
+    currentPage,
+  });
+
+  const handleSortChange = (sortOrder: string) => {
+    let sortedData = [...receivedProducts];
+
+    if (sortOrder === HIGHTOLOW) {
+      sortedData.sort((a, b) => b.price - a.price); // Sort by price descending
+    } else if (sortOrder === LOWTOHIGH) {
+      sortedData.sort((a, b) => a.price - b.price); // Sort by price ascending
+    } else {
+      sortedData = [...products]; // Reset to default
+    }
+
+    setReceivedProducts(sortedData);
+  };
+
+  useEffect(() => {
+    setRenderedProducts(paginatedProducts);
+
+    return () => {
+      setRenderedProducts([]);
+    };
+  }, [currentPage, receivedProducts]);
 
   return (
     <div className="p-6">
@@ -24,7 +51,10 @@ export default function ProductTable({
         </p>
       ) : (
         <>
-          <DataTable products={paginatedProducts} />
+          <div className="flex justify-end mb-4">
+            <SortDropdown onSortChange={handleSortChange} />
+          </div>
+          <DataTable products={renderedProducts} />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
