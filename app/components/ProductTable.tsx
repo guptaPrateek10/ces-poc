@@ -6,7 +6,7 @@ import Pagination from "./Pagination";
 import UsePaginate from "../hooks/UsePaginate";
 import SortDropdown from "./SortDropdown";
 import { HIGHTOLOW, LOWTOHIGH } from "../utils/constants";
-
+import { Button } from "@/components/ui/button";
 export default function ProductTable({
   products,
 }: {
@@ -51,7 +51,10 @@ export default function ProductTable({
         </p>
       ) : (
         <>
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between mb-4">
+            <Button data-testid="add-button" className="bg-gray-700 hover:bg-slate-500 p-4">
+              Add Product
+            </Button>
             <SortDropdown onSortChange={handleSortChange} />
           </div>
           <DataTable products={renderedProducts} />

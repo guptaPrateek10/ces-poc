@@ -1,4 +1,4 @@
-import {  render, screen } from "@testing-library/react";
+import { render,screen } from "@testing-library/react";
 import ProductTable from "../../app/components/ProductTable";
 import { ProductTypes } from "../../app/types/productTypes";
 import { faker } from "@faker-js/faker";
@@ -13,7 +13,6 @@ jest.mock("../../app/components/DataTable", () => {
   };
 });
 describe("ProductTable Component Testing", () => {
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -30,8 +29,7 @@ describe("ProductTable Component Testing", () => {
         id: parseInt(faker.string.ulid()),
         title: faker.commerce.productName(),
         price: parseInt(faker.commerce.price()),
-        description:
-          faker.commerce.productDescription(),
+        description: faker.commerce.productDescription(),
         category: faker.commerce.department(),
       },
     ];
@@ -39,7 +37,6 @@ describe("ProductTable Component Testing", () => {
     const dataTable = screen.getByTestId("data-table");
     expect(dataTable).toBeInTheDocument();
     expect(dataTable).toHaveTextContent("Mocked DataTable with 1 products");
-  
   });
 
   test("Sort dropdown is rendered in product table with default values as empty string ", () => {
@@ -48,8 +45,7 @@ describe("ProductTable Component Testing", () => {
         id: parseInt(faker.string.ulid()),
         title: faker.commerce.productName(),
         price: parseInt(faker.commerce.price()),
-        description:
-          faker.commerce.productDescription(),
+        description: faker.commerce.productDescription(),
         category: faker.commerce.department(),
       },
     ];
@@ -65,8 +61,7 @@ describe("ProductTable Component Testing", () => {
         id: parseInt(faker.string.ulid()),
         title: faker.commerce.productName(),
         price: parseInt(faker.commerce.price()),
-        description:
-          faker.commerce.productDescription(),
+        description: faker.commerce.productDescription(),
         category: faker.commerce.department(),
       },
     ];
@@ -79,5 +74,19 @@ describe("ProductTable Component Testing", () => {
     expect(screen.getByText("Reset")).toBeInTheDocument();
   });
 
- 
+  test("Add button is rendered in product table", () => {
+    const mockData: ProductTypes[] = [
+      {
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ];
+    render(<ProductTable products={mockData} />);
+    const addButton = screen.getByTestId("add-button");
+    expect(addButton).toBeInTheDocument();
+    expect(addButton).toHaveTextContent("Add Product");
+  });
 });

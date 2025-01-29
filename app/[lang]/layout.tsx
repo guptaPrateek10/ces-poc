@@ -33,7 +33,7 @@ export default async function RootLayout({
   return (
     <html lang={(await params).lang}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-primary text-primary-foreground`}
       >
         <Toaster richColors closeButton position="top-right" />
         {children}
