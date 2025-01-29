@@ -1,7 +1,7 @@
-import { render,screen } from "@testing-library/react";
+import { fireEvent, render,screen, waitFor } from "@testing-library/react";
 import ProductTable from "../../app/components/ProductTable";
 import { ProductTypes } from "../../app/types/productTypes";
-import { faker } from "@faker-js/faker";
+import { faker, fi } from "@faker-js/faker";
 
 jest.mock("../../app/components/DataTable", () => {
   return function MockDataTable({ products }: { products: ProductTypes[] }) {
@@ -74,7 +74,10 @@ describe("ProductTable Component Testing", () => {
     expect(screen.getByText("Reset")).toBeInTheDocument();
   });
 
-  test("Add button is rendered in product table", () => {
+});
+
+describe("ProductTable rendered and testing react hook form", () => {
+  it("should render the ProductTable component with add product button", () => {
     const mockData: ProductTypes[] = [
       {
         id: parseInt(faker.string.ulid()),
@@ -88,5 +91,72 @@ describe("ProductTable Component Testing", () => {
     const addButton = screen.getByTestId("add-button");
     expect(addButton).toBeInTheDocument();
     expect(addButton).toHaveTextContent("Add Product");
+  
   });
+
+  it("test if click on add product button will open the add product form", () => {
+    const mockData: ProductTypes[] = [
+      {
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ];
+    render(<ProductTable products={mockData} />);
+  const addButton = screen.getByTestId("add-button");
+  fireEvent.click(addButton);
+
+  const formTitle = screen.getByText("Add New Product");
+  expect(formTitle).toBeInTheDocument();
+  });
+
+  it("validates form field before form submission", () => {
+    const mockData: ProductTypes[] = [
+      {
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ];
+
+    render(<ProductTable products={mockData} />);
+    fireEvent.click(screen.getByTestId("add-button"));
+
+    fireEvent.click(screen.getByTestId("submit-button"));
+    expect(screen.getByText("Title is required")).toBeInTheDocument();
+    expect(screen.getByText("Price is required")).toBeInTheDocument();
+    expect(screen.getByText("Description is required")).toBeInTheDocument();
+    expect(screen.getByText("Category is required")).toBeInTheDocument();
+
+  });
+
+  it("should submit the form when all fields are filled", async() => {
+    const mockData: ProductTypes[] = [
+      {
+        id: parseInt(faker.string.ulid()),
+        title: faker.commerce.productName(),
+        price: parseInt(faker.commerce.price()),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ];
+
+    render(<ProductTable products={mockData} />);
+    fireEvent.click(screen.getByTestId("add-button"));
+
+    fireEvent.change(screen.getByLabelText("Title"),{target:{value: "Product C"}});
+    fireEvent.change(screen.getByLabelText("Price"), { target: { value: "150" } });
+    fireEvent.change(screen.getByLabelText("Description"), { target: { value: "New Product" } });
+    fireEvent.change(screen.getByLabelText("Category"), { target: { value: "Category C" } });
+
+
+    fireEvent.click(screen.getByTestId("submit-button"));
+    await waitFor(() => {
+      expect(screen.getByText("Product C")).toBeInTheDocument();
+    });
+  })
 });
