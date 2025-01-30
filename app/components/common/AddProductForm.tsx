@@ -30,21 +30,27 @@ const productSchema = z.object({
   category: z.string().min(1, "Category is required"),
 });
 const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
-  const form = useForm<z.infer<typeof productSchema>>({
-    resolver: zodResolver(productSchema),
-    defaultValues: {
-      title: "",
-      price: 0,
-      description: "",
-      category: "",
-    },
-  });
+//   const form = useForm<z.infer<typeof productSchema>>({
+//     resolver: zodResolver(productSchema),
+//     defaultValues: {
+//       title: "",
+//       price: 0,
+//       description: "",
+//       category: "",
+//     },
+//   });
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ProductTypes>({
     resolver: zodResolver(productSchema),
+    defaultValues: {
+        title: "",
+        price: 0,
+        description: "",
+        category: "",
+      },
   });
   return (
     <div className="fixed inset-0 bg-gray-700 bg-opacity-75 flex justify-center items-center">
