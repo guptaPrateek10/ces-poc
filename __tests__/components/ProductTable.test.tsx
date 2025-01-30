@@ -1,7 +1,7 @@
 import { fireEvent, render,screen, waitFor } from "@testing-library/react";
 import ProductTable from "../../app/components/ProductTable";
 import { ProductTypes } from "../../app/types/productTypes";
-import { faker, fi } from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 jest.mock("../../app/components/DataTable", () => {
   return function MockDataTable({ products }: { products: ProductTypes[] }) {

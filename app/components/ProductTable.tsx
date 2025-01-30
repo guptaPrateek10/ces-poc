@@ -7,11 +7,13 @@ import UsePaginate from "../hooks/UsePaginate";
 import SortDropdown from "./SortDropdown";
 import { HIGHTOLOW, LOWTOHIGH } from "../utils/constants";
 import { Button } from "@/components/ui/button";
+import AddProductForm from "./common/AddProductForm";
 export default function ProductTable({
   products,
 }: {
   products: ProductTypes[];
 }) {
+  const [isAddProductFormOpen, setIsAddProductFormOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [receivedProducts, setReceivedProducts] =
     useState<ProductTypes[]>(products);
@@ -43,6 +45,13 @@ export default function ProductTable({
     };
   }, [currentPage, receivedProducts]);
 
+  const handleAddProduct = (newProduct: ProductTypes) => {
+    setReceivedProducts((prev) => [...prev, newProduct]);
+  };
+
+  const toggleAddProductForm = () => {
+    setIsAddProductFormOpen(!isAddProductFormOpen);
+  }
   return (
     <div className="p-6">
       {products.length === 0 ? (
@@ -52,7 +61,7 @@ export default function ProductTable({
       ) : (
         <>
           <div className="flex justify-between mb-4">
-            <Button data-testid="add-button" className="bg-gray-700 hover:bg-slate-500 p-4">
+            <Button onClick={toggleAddProductForm} data-testid="add-button" className="bg-gray-700 hover:bg-slate-500 p-4">
               Add Product
             </Button>
             <SortDropdown onSortChange={handleSortChange} />
@@ -63,6 +72,12 @@ export default function ProductTable({
             totalPages={totalPages}
             onPageChange={(page) => setCurrentPage(page)}
           />
+          {isAddProductFormOpen && (
+            <AddProductForm
+              onSubmit={handleAddProduct}
+              onClose={toggleAddProductForm}
+            />
+          )}
         </>
       )}
     </div>
