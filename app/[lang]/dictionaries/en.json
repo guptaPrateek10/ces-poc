@@ -1,0 +1,9 @@
+{
+  "Home": {
+    "welcome": "Welcome to Home Page",
+    "title": "Next js 14 Internationization i18n"
+  },
+  "Heading": {
+    "title": "Welcome to POC"
+  }
+}
