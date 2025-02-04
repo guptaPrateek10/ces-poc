@@ -15,7 +15,7 @@ const SortDropdown = ({ onSortChange }: SortDropdownProps) => {
         onChange={(e) => onSortChange(e.target.value)}
         defaultValue=""
         name="sortByPrice"
-        className="p-2 border rounded bg-gray-700 text-white"
+        className="p-2 border rounded bg-gray-700 text-sm text-white border-none "
       >
         <option value="" disabled  hidden>
          Sort by price

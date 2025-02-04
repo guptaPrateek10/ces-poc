@@ -18,6 +18,7 @@ import { ProductTypes } from "@/app/types/productTypes";
 type AddProductFormProps = {
   onSubmit: (data: any) => void;
   onClose: () => void;
+  title ?:string;
 };
 
 const productSchema = z.object({
@@ -29,16 +30,8 @@ const productSchema = z.object({
   description: z.string().min(1, "Description is required"),
   category: z.string().min(1, "Category is required"),
 });
-const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
-//   const form = useForm<z.infer<typeof productSchema>>({
-//     resolver: zodResolver(productSchema),
-//     defaultValues: {
-//       title: "",
-//       price: 0,
-//       description: "",
-//       category: "",
-//     },
-//   });
+const AddProductForm = ({ onSubmit, onClose,title }: AddProductFormProps) => {
+
   const {
     register,
     handleSubmit,
@@ -46,7 +39,7 @@ const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
   } = useForm<ProductTypes>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-        title: "",
+        title: title ?? "",
         price: 0,
         description: "",
         category: "",
@@ -66,10 +59,11 @@ const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
         >
           {/* title */}
           <div className="mb-4">
-            <label  className="block text-white text-sm font-medium">
+            <label htmlFor="title" className="block text-white text-sm font-medium">
               Title
             </label>
             <input
+            id="title"
               {...register("title")}
               className=" w-full border text-black p-2 rounded"
             />
@@ -79,10 +73,11 @@ const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
           </div>
           {/* price */}
           <div className="mb-4">
-            <label className="block text-white text-sm font-medium">
+            <label htmlFor="price" className="block text-white text-sm font-medium">
               Price
             </label>
             <input
+            id="price"
               {...register("price")}
               className=" w-full border text-black p-2 rounded"
             />
@@ -92,10 +87,11 @@ const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
           </div>
           {/* desc */}
           <div className="mb-4">
-            <label className="block text-white text-sm font-medium">
+            <label htmlFor="description" className="block text-white text-sm font-medium">
               Description
             </label>
             <input
+            id="description"
               {...register("description")}
               className=" w-full border text-black p-2 rounded"
             />
@@ -105,10 +101,11 @@ const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
           </div>
           {/* category */}
           <div className="mb-4">
-            <label className="block text-white text-sm font-medium">
+            <label htmlFor="category" className="block text-white text-sm font-medium">
               Category
             </label>
             <input
+            id="category"
               {...register("category")}
               className=" w-full border text-black p-2 rounded"
             />
@@ -139,3 +136,4 @@ const AddProductForm = ({ onSubmit, onClose }: AddProductFormProps) => {
 };
 
 export default AddProductForm;
+ 

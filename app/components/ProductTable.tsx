@@ -8,6 +8,7 @@ import SortDropdown from "./SortDropdown";
 import { HIGHTOLOW, LOWTOHIGH } from "../utils/constants";
 import { Button } from "@/components/ui/button";
 import AddProductForm from "./common/AddProductForm";
+import ProductDropdown from "./ProductSearch";
 export default function ProductTable({
   products,
 }: {
@@ -15,6 +16,7 @@ export default function ProductTable({
 }) {
   const [isAddProductFormOpen, setIsAddProductFormOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [title,setTitle] = useState("");
   const [receivedProducts, setReceivedProducts] =
     useState<ProductTypes[]>(products);
   const [renderedProducts, setRenderedProducts] = useState<ProductTypes[]>([]);
@@ -52,8 +54,19 @@ export default function ProductTable({
   const toggleAddProductForm = () => {
     setIsAddProductFormOpen(!isAddProductFormOpen);
   }
+
+  const handleOnSelect = (product:ProductTypes)=>{
+    setReceivedProducts([product]);
+  }
+  const toggleResetProductList = () => {
+    setReceivedProducts([...products]);
+  }
+  const handleAddNew = async(title:string)=>{
+    await setTitle(title);
+    setIsAddProductFormOpen(true);
+  }
   return (
-    <div className="p-6">
+    <div className="p-6 ">
       {products.length === 0 ? (
         <p data-testid="no-data" className="text-red-500 text-lg">
           No data found
@@ -64,7 +77,11 @@ export default function ProductTable({
             <Button onClick={toggleAddProductForm} data-testid="add-button" className="bg-gray-700 hover:bg-slate-500 p-4">
               Add Product
             </Button>
+            <ProductDropdown products={products} onSelect={handleOnSelect} onAddNew={handleAddNew} />
             <SortDropdown onSortChange={handleSortChange} />
+            <Button onClick={toggleResetProductList} data-testid="reset-button" className="bg-gray-700 hover:bg-slate-500 p-4">
+              Reset Product List
+            </Button>
           </div>
           <DataTable products={renderedProducts} />
           <Pagination
@@ -76,6 +93,7 @@ export default function ProductTable({
             <AddProductForm
               onSubmit={handleAddProduct}
               onClose={toggleAddProductForm}
+              title={title}
             />
           )}
         </>

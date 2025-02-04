@@ -1,4 +1,10 @@
-import { fireEvent, render,screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import ProductTable from "../../app/components/ProductTable";
 import { ProductTypes } from "../../app/types/productTypes";
 import { faker } from "@faker-js/faker";
@@ -73,7 +79,6 @@ describe("ProductTable Component Testing", () => {
     expect(screen.getByText("Price: Low to High")).toBeInTheDocument();
     expect(screen.getByText("Reset")).toBeInTheDocument();
   });
-
 });
 
 describe("ProductTable rendered and testing react hook form", () => {
@@ -91,7 +96,6 @@ describe("ProductTable rendered and testing react hook form", () => {
     const addButton = screen.getByTestId("add-button");
     expect(addButton).toBeInTheDocument();
     expect(addButton).toHaveTextContent("Add Product");
-  
   });
 
   it("test if click on add product button will open the add product form", () => {
@@ -105,14 +109,14 @@ describe("ProductTable rendered and testing react hook form", () => {
       },
     ];
     render(<ProductTable products={mockData} />);
-  const addButton = screen.getByTestId("add-button");
-  fireEvent.click(addButton);
+    const addButton = screen.getByTestId("add-button");
+    fireEvent.click(addButton);
 
-  const formTitle = screen.getByText("Add New Product");
-  expect(formTitle).toBeInTheDocument();
+    const formTitle = screen.getByText("Add New Product");
+    expect(formTitle).toBeInTheDocument();
   });
 
-  it("validates form field before form submission", () => {
+  it("validates form field before form submission", async () => {
     const mockData: ProductTypes[] = [
       {
         id: parseInt(faker.string.ulid()),
@@ -127,14 +131,18 @@ describe("ProductTable rendered and testing react hook form", () => {
     fireEvent.click(screen.getByTestId("add-button"));
 
     fireEvent.click(screen.getByTestId("submit-button"));
-    expect(screen.getByText("Title is required")).toBeInTheDocument();
-    expect(screen.getByText("Price is required")).toBeInTheDocument();
-    expect(screen.getByText("Description is required")).toBeInTheDocument();
-    expect(screen.getByText("Category is required")).toBeInTheDocument();
 
+    await waitFor(() => {
+      expect(screen.getByText("Title is required")).toBeInTheDocument();
+      expect(
+        screen.getByText("Price must be a valid number")
+      ).toBeInTheDocument();
+      expect(screen.getByText("Description is required")).toBeInTheDocument();
+      expect(screen.getByText("Category is required")).toBeInTheDocument();
+    });
   });
 
-  it("should submit the form when all fields are filled", async() => {
+  it("should submit the form when all fields are filled", async () => {
     const mockData: ProductTypes[] = [
       {
         id: parseInt(faker.string.ulid()),
@@ -148,15 +156,24 @@ describe("ProductTable rendered and testing react hook form", () => {
     render(<ProductTable products={mockData} />);
     fireEvent.click(screen.getByTestId("add-button"));
 
-    fireEvent.change(screen.getByLabelText("Title"),{target:{value: "Product C"}});
-    fireEvent.change(screen.getByLabelText("Price"), { target: { value: "150" } });
-    fireEvent.change(screen.getByLabelText("Description"), { target: { value: "New Product" } });
-    fireEvent.change(screen.getByLabelText("Category"), { target: { value: "Category C" } });
-
+    fireEvent.change(screen.getByLabelText("Title"), {
+      target: { value: "Product C" },
+    });
+    fireEvent.change(screen.getByLabelText("Price"), {
+      target: { value: "150" },
+    });
+    fireEvent.change(screen.getByLabelText("Description"), {
+      target: { value: "New Product" },
+    });
+    fireEvent.change(screen.getByLabelText("Category"), {
+      target: { value: "Category C" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-button"));
     await waitFor(() => {
-      expect(screen.getByText("Product C")).toBeInTheDocument();
+      const dataTable = screen.getByTestId("data-table");
+      expect(dataTable).toBeInTheDocument();
+      expect(dataTable).toHaveTextContent(`Mocked DataTable with 2 products`);
     });
-  })
+  });
 });
