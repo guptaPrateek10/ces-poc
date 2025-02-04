@@ -18,7 +18,7 @@ const DataTable = (props: productsProps) => {
     "Description",
   ];
   return (
-    <table className="table-auto w-full border-collapse border border-gray-300">
+    <table dat-testid="data-table" className="table-auto w-full border-collapse border border-gray-300">
       <TableHeaders tableProps={tableProps} />
       <TableBody products={products} />
     </table>

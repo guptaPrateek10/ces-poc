@@ -1,6 +1,7 @@
+import { getDictionary } from '@/app/[lang]/dictionaries';
 import React from 'react'
 
-const Heading = ({ title }: { title: string }) => {
+const Heading =  ({ title,lang }: { title: string ,lang:"en" | "nl"}) => {
     return (
         <div>
             <div >

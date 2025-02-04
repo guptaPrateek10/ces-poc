@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { jest } from "@jest/globals";
-import Home, { getProducts } from "../app/page";
+import Home, { getProducts } from "../app/[lang]/page";
 
 
 describe("Home  Component Tesing", () => {
@@ -10,13 +10,17 @@ describe("Home  Component Tesing", () => {
     URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`;
     global.fetch = jest.fn();
   });
-
+  
   afterEach(() => {
     jest.clearAllMocks();
     cleanup();
   });
-
+  
+  
+  
   it("should handle successful fetch", async () => {
+    const params = { lang: "en" };
+   
     const mockData = [
       {
         id: 1,
@@ -41,7 +45,7 @@ describe("Home  Component Tesing", () => {
     );
     expect(global.fetch).toHaveBeenCalledTimes(1);
 
-    render(await Home());
+    render(await Home({ params}));
 
     const noDataTitle = screen.getByTestId("no-data");
     expect(noDataTitle).toBeInTheDocument();
@@ -50,6 +54,7 @@ describe("Home  Component Tesing", () => {
   //check failure fetch
 
   it("should handle fetch failure", async () => {
+    const params = { lang: "en" };
     // Mock failure response
     global.fetch.mockResolvedValueOnce({
       ok: false,
@@ -74,9 +79,11 @@ describe("Home  Component Tesing", () => {
   });
 
   it("renders the Home component with child Heading ", async () => {
-    const component = render(await Home());
+    const params = { lang: "en" };
+
+    const component = render(await Home({params}));
     // Check if the Heading component renders with the correct title
-    const childElementHeading = component.getByText("Product Table", {
+    const childElementHeading = component.getByText("Welcome to POC", {
       exact: true,
     });
     expect(childElementHeading).toBeInTheDocument();
@@ -84,8 +91,8 @@ describe("Home  Component Tesing", () => {
 
 
   it("renders the Home component with child ProductTable", async () => {
-    const component = render(await Home());
-    console.log(component);
+    const params = { lang: "en" };
+    const component = render(await Home({params}));
     // Check if the Heading component renders with the correct title
     const childElementHeading = component.getByText("No data found", {
       exact: true,

@@ -42,7 +42,7 @@ describe("Table headers component", () => {
     });
   });
 
-  test("render table boyd with empty [] data", async () => {
+  test("render table body with empty [] data", async () => {
     render(<TableBody products={[]} />);
     const rows = await screen.getByTestId("table-body");
     expect(rows).not.toHaveTextContent(String(products[0].id));
